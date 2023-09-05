@@ -1,17 +1,26 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Create a new record | {{ parent() }}{% endblock %}
-{% block body %}
-<h1>{{ title }}</h1>
 
-<div>
-    Tracks:
-    <ul>
-    {% for song in songs %}
-    <li>
-        {{ song.song}} - {{ song.artist }}
-    </li>
-    {% endfor %}
-    </ul>
-</div>
+{% block body %}
+    <div>
+        <h1 class="text-4xl font-bold ml-32 mt-10">{{ title }}</h1>
+    </div>
+    <div class="mt-16">
+        <h2 class="text-3xl text-center font-semibold">Top 5 songs of all time:</h2>
+    </div>
+    <div class="flex flex-col justify-center grid grid-cols-5 gap-4 mt-16">
+        {% for song in top5Songs %}
+            <div class="w-full px-4">
+                <div class="bg-white shadow-md p-4 rounded-lg mb-4">
+
+                    <h2 class="text-xl font-semibold">{{ song.song }}</h2>
+                    <p class="text-gray-600">Artist: <strong>{{ song.artist }}</strong></p>
+                    <p class="text-gray-500 text-sm">Genre: {{ song.genre }}</p>
+                    <p class="text-gray-500 text-sm">Rating: {{ song.rating }}/100</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
 {% endblock %}
