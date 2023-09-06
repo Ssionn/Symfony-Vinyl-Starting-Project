@@ -3,14 +3,14 @@
 {% block title %}Create a new record | {{ parent() }}{% endblock %}
 
 {% block body %}
-    <div>
-        <h1 class="text-4xl font-bold ml-32 mt-10">{{ title }}</h1>
+    <div class="flex justify-center mt-16">
+        <h1 class="text-4xl font-bold md:mt-10">{{ title }}</h1>
     </div>
     <div class="mt-16">
         <h2 class="text-3xl text-center font-semibold">Top 5 songs of all time:</h2>
     </div>
-    <div class="flex flex-col justify-center grid grid-cols-5 gap-4 mt-16">
-        {% for song in top5Songs %}
+    <div class="flex flex-col justify-center grid md:grid-cols-5 gap-4 mt-16">
+        {% for song in songs %}
             <div class="w-full px-4">
                 <div class="bg-white shadow-md p-4 rounded-lg mb-4">
 

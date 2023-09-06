@@ -2,17 +2,36 @@
 
 {% block title %}{{ title }}{% endblock %}
 {% block body %}
-    <div class="flex flex-row items-center ml-20 mt-10 space-x-3">
+    <div class="flex md:flex-row flex-col items-center mt-10 md:space-x-3">
+        <h1 class="text-4xl font-bold md:ml-20">Browse {{ genre ? genre : 'All Genres' }}</h1>
         <a href="{{ path('app_homepage') }}"
-                class="py-2.5 px-5 text-sm font-medium focus:outline-none rounded-full border border-gray-200 focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 flex items-center">
+           class="py-2.5 mt-1 px-5 text-sm font-medium focus:outline-none rounded-full border border-gray-200 focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 flex items-center">
             <i class="fa-solid fa-arrow-rotate-left fa-spin fa-spin-reverse" style="color: #ffffff;"></i>
             &nbsp;
             Back
         </a>
-        <h1 class="text-4xl font-bold">{{ title }}</h1>
     </div>
 
-    <div class="flex flex-col justify-center grid grid-cols-3 gap-4 mt-20">
+    <div class="flex flex-col mt-10">
+        <h2 class="text-3xl font-bold md:ml-20">Filter by Genre</h2>
+        <div class="flex flex-row md:ml-16 mt-3 space-x-2">
+            <a href="{{ path('app_browse') }}"
+               class="py-2.5 mt-1 px-5 text-sm font-medium focus:outline-none rounded-full border border-gray-200 focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 flex items-center">
+                All
+            </a>
+            {% for genre in genres %}
+                <a href="{{ path('app_browse', {
+                    slug: genre.genre
+                }) }}"
+                   class="py-2.5 mt-1 px-5 text-sm font-medium focus:outline-none rounded-full border border-gray-200 focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 flex items-center">
+                    {{ genre.genre }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <div class="flex flex-col justify-center md:grid md:grid-cols-3 md:gap-4 mt-20">
         {% for song in songs %}
             <div class="w-full px-4">
                 <div class="bg-white shadow-md p-4 rounded-lg mb-4">
