@@ -41,16 +41,13 @@ final class Version20230905142005 extends AbstractMigration
             ['song' => "Let It Be", 'artist' => "The Beatles", 'genre' => "Rock", 'rating' => 86],
             ['song' => "Yesterday", 'artist' => "The Beatles", 'genre' => "Rock", 'rating' => 84],
         ];
-
         foreach ($songs as $song) {
-            $this->addSql('INSERT INTO vinyl (artist, song, genre, rating) VALUES (:artist, :song, :genre, :rating)', $song);
+            $this->addSql('INSERT INTO vinyl (song, artist, genre, rating) VALUES (:song, :artist, :genre, :rating)', $song);
         }
-
     }
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('DELETE FROM vinyl');
     }
 }

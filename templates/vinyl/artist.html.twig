@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="flex md:flex-row flex-col items-center mt-10 md:space-x-3">
+        <h1 class="text-4xl font-bold md:ml-20">Browse: {{ artist ? artist : "Browse All Songs" }}</h1>
+        <a href="{{ path('app_browse') }}"
+           class="py-2.5 mt-1 px-5 text-sm font-medium focus:outline-none rounded-full border border-gray-200 focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 flex items-center">
+            <i class="fa-solid fa-arrow-rotate-left fa-spin fa-spin-reverse" style="color: #ffffff;"></i>
+            &nbsp;
+            Back
+        </a>
+    </div>
+
+
+    {% if artist.imageFilename %}
+        <div class="flex flex-col md:ml-20 mt-10">
+            <img src="{{ asset('public/uploads/images/' ~ image.imageFilename) }}" alt="Artist Image" class="w-96 h-96">
+        </div>
+    {% endif %}
+
+    {{ form_start(form) }}
+
+    <div class="flex flex-col md:ml-20 mt-10">
+        {{ form_row(form.imageFilename) }}
+
+    </div>
+    <button type="submit"
+            class="md:ml-20 mt-10 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+        Test
+    </button>
+    {{ form_end (form) }}
+
+    <div class="flex flex-col justify-center lg:grid lg:grid-cols-3 lg:gap-4 mt-20">
+        {% for artist in artists %}
+            <div class="w-full px-4">
+                <div class="bg-white shadow-md p-4 rounded-lg mb-4">
+                    <details>
+                        <summary>
+                            <h2 class="text-xl font-semibold">{{ artist.song }}</h2>
+                        </summary>
+                        <iframe width="100%" height="275" src="{{ artist.link }}"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                type="application/x-shockwave-flash" allowfullscreen></iframe>
+                    </details>
+                    <p class="text-gray-600">Artist: <strong>{{ artist.artist }}</strong></p>
+                    <p class="text-gray-500 text-sm">Genre: {{ artist.genre }}</p>
+                    <p class="text-gray-500 text-sm">Rating: {{ artist.rating }}/100</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

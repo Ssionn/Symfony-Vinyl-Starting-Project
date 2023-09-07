@@ -25,6 +25,9 @@ class Vinyl
     #[ORM\Column(nullable: true)]
     private ?int $rating = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $link = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,18 @@ class Vinyl
     public function setRating(?int $rating): static
     {
         $this->rating = $rating;
+
+        return $this;
+    }
+
+    public function getLink(): string
+    {
+        return $this->link;
+    }
+
+    public function setLink(string $link): static
+    {
+        $this->link = $link;
 
         return $this;
     }

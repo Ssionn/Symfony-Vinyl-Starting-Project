@@ -13,8 +13,8 @@
     </div>
 
     <div class="flex flex-col mt-10">
-        <h2 class="text-3xl font-bold md:ml-20">Filter by Genre</h2>
-        <div class="flex flex-row md:ml-16 mt-3 space-x-2">
+        <h2 class="text-3xl font-bold text-center md:text-left md:ml-20">Filter by Genre</h2>
+        <div class="flex justify-center flex-wrap md:justify-start flex-row md:ml-16 mt-3 w-auto space-x-2">
             <a href="{{ path('app_browse') }}"
                class="py-2.5 mt-1 px-5 text-sm font-medium focus:outline-none rounded-full border border-gray-200 focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 flex items-center">
                 All
@@ -30,13 +30,22 @@
         </div>
     </div>
 
-
-    <div class="flex flex-col justify-center md:grid md:grid-cols-3 md:gap-4 mt-20">
+    <div class="flex flex-col justify-center lg:grid lg:grid-cols-3 lg:gap-4 mt-20">
         {% for song in songs %}
             <div class="w-full px-4">
                 <div class="bg-white shadow-md p-4 rounded-lg mb-4">
-                    <h2 class="text-xl font-semibold">{{ song.song }}</h2>
-                    <p class="text-gray-600">Artist: <strong>{{ song.artist }}</strong></p>
+                    <details>
+                        <summary>
+                            <h2 class="text-xl font-semibold">{{ song.song }}</h2>
+                        </summary>
+                        <iframe width="100%" height="275" src="{{ song.link }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" type="application/x-shockwave-flash" allowfullscreen></iframe>
+                    </details>
+                    <p class="text-gray-600">
+                        <a href="{{ path('app_artist', {
+                            artist: song.artist
+                        }) }}">
+                        Artist: <strong>{{ song.artist }}</strong></p>
+                        </a>
                     <p class="text-gray-500 text-sm">Genre: {{ song.genre }}</p>
                     <p class="text-gray-500 text-sm">Rating: {{ song.rating }}/100</p>
                 </div>

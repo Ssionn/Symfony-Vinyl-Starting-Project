@@ -2,14 +2,16 @@
 
 namespace App\Controller;
 
-use App\Entity\Vinyl;
+use App\Entity\Image;
+use App\Form\ImageType;
 use App\Repository\VinylRepository;
+use \Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use function Symfony\Component\String\u;
 
+use Symfony\Component\String\Slugger\SluggerInterface;
+use function Symfony\Component\String\u;
 class VinylController extends AbstractController
 {
 
@@ -54,4 +56,52 @@ class VinylController extends AbstractController
             'genres' => $genres,
         ]);
     }
+
+    #[Route('/browse/artist/{artist}', name: 'app_artist')]
+    public function artist(string $artist, Request $request, SluggerInterface $slugger): Response
+    {
+        $image = new Image();
+        $form = $this->createForm(ImageType::class, $image);
+        $form = $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('imageFilename')->getData();
+
+            if($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+                try {
+                    $imageFile->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                }
+
+                $image->setImageFilename($newFilename);
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($image);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_artist');
+        }
+
+        $artists = $this->vinylRepository->findByArtist($artist);
+
+        if (empty($artists)) {
+            throw $this->createNotFoundException("No songs found for artist '$artist'");
+        }
+
+        return $this->render('vinyl/artist.html.twig', [
+            'title' => "Browse: $artist",
+            'artist' => $artist,
+            'artists' => $artists,
+            'form' => $form,
+        ]);
+    }
+
 }

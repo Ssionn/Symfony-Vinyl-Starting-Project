@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Create a new record | {{ parent() }}{% endblock %}
+{% block title %}{{ parent() }} | Homepage{% endblock %}
 
 {% block body %}
     <div class="flex justify-center mt-16">
@@ -13,8 +13,12 @@
         {% for song in songs %}
             <div class="w-full px-4">
                 <div class="bg-white shadow-md p-4 rounded-lg mb-4">
-
-                    <h2 class="text-xl font-semibold">{{ song.song }}</h2>
+                    <details>
+                        <summary>
+                            <h2 class="text-xl font-semibold">{{ song.song }}</h2>
+                    </summary>
+                        <iframe width="100%" height="275" src="{{ song.link }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" type="application/x-shockwave-flash" allowfullscreen></iframe>
+                    </details>
                     <p class="text-gray-600">Artist: <strong>{{ song.artist }}</strong></p>
                     <p class="text-gray-500 text-sm">Genre: {{ song.genre }}</p>
                     <p class="text-gray-500 text-sm">Rating: {{ song.rating }}/100</p>

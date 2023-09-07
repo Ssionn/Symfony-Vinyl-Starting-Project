@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Vinyl;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -57,6 +56,17 @@ class VinylRepository extends ServiceEntityRepository
             ->createQueryBuilder('v')
             ->orderBy('v.rating', 'DESC')
             ->setMaxResults($amount)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findByArtist(string $artist): array
+    {
+        return $this
+            ->createQueryBuilder('v')
+            ->andWhere('v.artist like :artist')
+            ->setParameter('artist', $artist)
             ->getQuery()
             ->getResult()
             ;
