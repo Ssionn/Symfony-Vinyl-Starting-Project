@@ -28,6 +28,10 @@ class Vinyl
     #[ORM\Column(length: 255)]
     private ?string $link = null;
 
+//    #[ORM\Column(nullable: true)]
+//    #[ORM\OneToOne(mappedBy: 'image')]
+//    private ?int $image_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -92,4 +96,16 @@ class Vinyl
 
         return $this;
     }
+
+//    public function getImageId(): ?int
+//    {
+//        return $this->image_id;
+//    }
+//
+//    public function setImageId(?int $image_id): static
+//    {
+//        $this->image_id = $image_id;
+//
+//        return $this;
+//    }
 }

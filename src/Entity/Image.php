@@ -12,9 +12,12 @@ final class Image
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
     #[ORM\Column]
     private ?string $imageFilename;
+
+//    #[ORM\Column]
+//    private ?string $artist = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -31,5 +34,17 @@ final class Image
 
         return $this;
     }
+
+//    public function getArtist(): ?string
+//    {
+//        return $this->artist;
+//    }
+//
+//    public function setArtist(string $artist): static
+//    {
+//        $this->artist = $artist;
+//
+//        return $this;
+//    }
 
 }

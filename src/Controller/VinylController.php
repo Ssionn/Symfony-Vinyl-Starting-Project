@@ -5,17 +5,19 @@ namespace App\Controller;
 use App\Entity\Image;
 use App\Form\ImageType;
 use App\Repository\VinylRepository;
-use \Symfony\Component\HttpFoundation\Request;
+use App\Repository\ArtistRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
 use Symfony\Component\String\Slugger\SluggerInterface;
 use function Symfony\Component\String\u;
+
 class VinylController extends AbstractController
 {
 
-    public function __construct(protected VinylRepository $vinylRepository)
+    public function __construct(protected VinylRepository $vinylRepository, protected ArtistRepository $ArtistRepository)
     {
 
     }
@@ -58,7 +60,10 @@ class VinylController extends AbstractController
     }
 
     #[Route('/browse/artist/{artist}', name: 'app_artist')]
-    public function artist(string $artist, Request $request, SluggerInterface $slugger): Response
+    public function artist(string           $artist,
+                           Request          $request,
+                           SluggerInterface $slugger,
+                           ManagerRegistry  $doctrine): Response
     {
         $image = new Image();
         $form = $this->createForm(ImageType::class, $image);
@@ -70,24 +75,27 @@ class VinylController extends AbstractController
             if($imageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
-
+                $newFilename = $safeFilename . '.' . $imageFile->guessExtension();
                 try {
                     $imageFile->move(
                         $this->getParameter('images_directory'),
                         $newFilename
                     );
                 } catch (FileException $e) {
+                    throw new \Exception("Error uploading image");
                 }
 
                 $image->setImageFilename($newFilename);
             }
 
-            $entityManager = $this->getDoctrine()->getManager();
+//            $artist = $this->ArtistRepository->findArtistImage(Artist::class, $artist)->getArtist();
+//            $image->setArtist($artist);
+
+            $entityManager = $doctrine->getManager();
             $entityManager->persist($image);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_artist');
+            return $this->redirectToRoute('app_artist', ['artist' => $artist]);
         }
 
         $artists = $this->vinylRepository->findByArtist($artist);
